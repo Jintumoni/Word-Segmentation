@@ -5,8 +5,6 @@ from sequence import arrange
 
 # step 1. loading the image
 img = cv.imread('./photos/skew.png');
-H, W = img.shape[0], img.shape[1]
-
 
 # step 2. convert the image to grayslace by 
 #         selecting a threshold, all the pixels values 
@@ -20,12 +18,12 @@ distTransform = DT(BnW_image)
 _, final_img = cv.threshold(distTransform, 7, 255, cv.THRESH_BINARY)
 
 # step 4. apply BFS to find contour
-contours = connected_components(final_img)
+contours, centroids = connected_components(final_img)
 for contour in contours:
     color = (0, 0, 0) # black boxes
     cv.rectangle(img, (contour[1], contour[0]), (contour[3], contour[2]), color, thickness=1)
 
-lines = arrange(contours)
+lines = arrange(contours, centroids)
 for _ in range(len(lines)):
     for i in range(0, len(lines[_]) - 1):
         box1, box2 = lines[_][i][0], lines[_][i + 1][0]
@@ -40,7 +38,7 @@ for _ in range(len(lines)):
         x, y = (box1[1] + box1[3]) // 2, (box1[0] + box1[2]) // 2 
         font = cv.FONT_HERSHEY_SIMPLEX
         cv.putText(img, msg, (x, y), font, 1, (0, 0, 255), 3, cv.LINE_AA)
-        
+    
 
 cv.imshow('distance transform', distTransform)
 cv.imshow('transformed image', final_img)
