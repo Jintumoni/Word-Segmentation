@@ -1,4 +1,5 @@
 photos/
 __pycache__/
 venv/
-main1.py
+*.txt
+.DS_Store
