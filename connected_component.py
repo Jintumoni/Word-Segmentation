@@ -6,7 +6,7 @@ def connected_components(img):
     q = deque() 
     H, W = img.shape[0], img.shape[1]
     vis = np.zeros((H, W), dtype=int)
-    contours = []
+    contours, centroids = [], []
     dir_x = [-1, 1, 0, 0, 1, -1, -1, 1]
     dir_y = [0, 0, -1, 1, 1, -1, 1, -1]
     for row in range(H):
@@ -15,6 +15,7 @@ def connected_components(img):
                 x_min, x_max, y_min, y_max = INF, -INF, INF, -INF
                 vis[row][col] = 1
                 q.append((row, col))
+                points, Cx, Cy = 1, row, col
                 while len(q):
                     x, y = q.popleft()
                     x_min = min(x_min, x)
@@ -29,8 +30,14 @@ def connected_components(img):
                         if not vis[x_][y_] and img[x_][y_] == 0:
                             vis[x_][y_] = 1
                             q.append((x_, y_))
+                            Cx += x_
+                            Cy += y_
+                            points += 1
+                Cx /= points
+                Cy /= points
                 contours.append([x_min, y_min, x_max, y_max])
-    return contours
+                centroids.append([Cx, Cy])
+    return contours, centroids
 
 def find_contours(img):
     INF = float("inf")
@@ -43,7 +50,6 @@ def find_contours(img):
     
     def recursive_connected_component(x1, y1, x2, y2):
         x_min, y_min, x_max, y_max = x1, y1, x2, y2
-        # print('inside', x1, y1, x2, y2)
         for row in range(x1, x2 + 1):
             for col in range(y1, y2 + 1):
                 if img[row][col] == 0 and not vis[row][col]:
@@ -98,7 +104,6 @@ def find_contours(img):
         for col in range(0, W):
             if img[row][col] == 0 and not vis[row][col]:
                 x_min, y_min, x_max, y_max = bfs(row, col)
-                # print(x_min, y_min, x_max, y_max)
                 x1, y1, x2, y2 = recursive_connected_component(x_min, y_min, x_max, y_max)
                 x_min = min(x_min, x1)
                 y_min = min(y_min, y1)
