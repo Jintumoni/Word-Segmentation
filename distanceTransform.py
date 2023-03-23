@@ -1,5 +1,4 @@
 import numpy as np
-import cv2
 
 def DT(binary_image):
     distances = np.zeros_like(binary_image, dtype=np.uint8)
@@ -11,7 +10,6 @@ def DT(binary_image):
             if binary_image[i, j] == 0:
                 distances[i, j] = 0
             else:
-                
                 if i - 1 >= 0 and j - 1 >= 0:
                     distances[i, j] = min(distances[i, j], distances[i-1, j-1] + 1)
                 if i - 1 >= 0 and j >= 0:
