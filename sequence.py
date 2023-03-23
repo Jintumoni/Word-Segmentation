@@ -69,7 +69,7 @@ def arrange(contours, centroids):
         i = V[_][1]
         maxCSF, j = 0, -1
         # print(f"finding CC for {i}")
-        for temp_ind in range(_, min(_ + 10, n)):
+        for temp_ind in range(_, n):
             ind = V[temp_ind][1]
             # print(f"checking CC {ind} csf = {CSF[i][ind]}")
             if CSF[i][ind] <= TH + 10**3:
