@@ -16,15 +16,20 @@ The proper word level segmentation of printed or handwritten text is an importan
 
    ```git clone https://github.com/Jintumoni/Word-Segmentation-Final-Year-Project.git```
 
-2. Create a folder named *Photos* where you will put all the handwritten texts for which you want to perform word segmentation
+2. Create a folder named *photos* where you will put all the handwritten texts for which you want to perform word segmentation
 
    ```mkdir photos```
 
-3. Put all the handwritten texts in the *Photos* directory
+3. Put all the handwritten texts in the *photos* directory
 
 4. To run the code (with image as *myFile.png*)
 
    ```bash coderunner.sh myFile.png```
+5. You can also provide additional flags `-d` and `-b`, `-d` represents the *Distance Transform Threshold* and `-b` represent the *Image Binarisation Threshold*
+
+   ```bash coderunner.sh -d 10 -b 200 myFile.png```
+
+6. All the segmented words will get automatically stored in a folder *result*
 
 ## 3. Output
 
@@ -33,7 +38,7 @@ The code works in the following order
 - Reading the image
 - Converting the image to binary image (black and white)
 - Perform Distance Transform on the image
-- Apply BFS to find the bounding boxes and calculate centroids of the boxes with an weighted average approach
+- Apply BFS to find the bounding boxes and calculate centroids of the boxes
 - Apply Line Segmentation algorithm 
 
 ![Binarised image](/Screenshots/binarised.png)
