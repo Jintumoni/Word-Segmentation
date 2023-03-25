@@ -1,11 +1,19 @@
 #!bin/bash
 
 dir=$PWD
-filename=$1
+args="$@"
 
-mkdir -p $dir/venv/
+# remove all contents of directory result if it exists
+if [ -d $dir/result ] 
+then
+    rm -r $dir/result/ 
+fi
+
+# create a directory "result" to store all the segmented words
+mkdir -p $dir/result
 
 # make a virtual environment
+mkdir -p $dir/venv/
 python3 -m venv $dir/venv/
 
 # activate the virtual environment
@@ -18,7 +26,7 @@ python3 -m pip install --upgrade pip 1>/dev/null
 pip3 install opencv-python numpy 1>/dev/null
 
 # run the python script
-python3 main.py $filename
+python3 main.py $args
 
 # deactivate the virtual environment
 deactivate
