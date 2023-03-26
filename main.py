@@ -10,10 +10,11 @@ def main(argv, LineSegmentation: bool):
     # if you don't provide -d or -b flags, these will be the default values
     BnW_THRESHOLD = 200
     DT_THRESHOLD = 6
+    SCALE_FACTOR = 1
     filename = ""
 
     try:
-        opts, args = getopt.getopt(argv, "b:d:")
+        opts, args = getopt.getopt(argv, "b:d:s:")
         filename = args[0]
     except getopt.GetoptError:
         sys.exit(2)
@@ -23,6 +24,8 @@ def main(argv, LineSegmentation: bool):
             BnW_THRESHOLD = int(arg)
         elif opt == '-d':
             DT_THRESHOLD = int(arg)
+        elif opt == '-s':
+            SCALE_FACTOR = float(arg)
 
     print(f"Doing Word Segmentation on \"{filename}\" ...")
 
@@ -82,7 +85,7 @@ def main(argv, LineSegmentation: bool):
                          (contour[3], contour[2]), color, thickness=1)
 
     # Scaling the image
-    scale_percent = 50 # percent of original size
+    scale_percent = SCALE_FACTOR * 100 # percent of original size
     width = int(img.shape[1] * scale_percent / 100)
     height = int(img.shape[0] * scale_percent / 100)
     dim = (width, height)
