@@ -4,10 +4,8 @@ import math
 
 EPS = 10**(-9)
 
-
 def getDistance(x1, y1, x2, y2):
     return math.sqrt((x1 - x2)**2 + (y1 - y2)**2)
-
 
 def getDistanceBetweenBox(box1, box2):
     x1Min, y1Min, x1Max, y1Max = box1[0], box1[1], box1[2], box1[3]
@@ -46,19 +44,15 @@ def getDistanceBetweenBox(box1, box2):
             # overlap
             return 0
 
-
 def getSlope(x1, y1, x2, y2):
     slope = (x2 - x1) / (y2 - y1 + EPS)
     return abs(math.atan(slope)) * 180 / math.pi
 
-
 def getSlopeFactor(slope):
     return 50 * math.exp(-slope * slope / 150)
 
-
 def getDistanceFactor(distance):
     return -pow(distance, 2) / 1000 + 50
-
 
 def connectivityStrength(x1, y1, x2, y2, D):
     slope = getSlope(x1, y1, x2, y2)
@@ -66,7 +60,6 @@ def connectivityStrength(x1, y1, x2, y2, D):
     distanceFactor = getDistanceFactor(D)
     CSF = distanceFactor + slopeFactor
     return CSF - 50
-
 
 def arrange(contours, centroids):
     n = len(contours)
@@ -81,16 +74,19 @@ def arrange(contours, centroids):
     for i in range(n):
         for j in range(n):
             C[i][j] = getDistanceBetweenBox(contours[i], contours[j])
+            # C[i][j] = getDistance(centroids[i][0], centroids[i][1], centroids[j][0], centroids[j][1])
             CSF[i][j] = connectivityStrength(
                 centroids[i][0], centroids[i][1], centroids[j][0], centroids[j][1], C[i][j])
 
     for _ in range(len(V)):
         i = V[_][1]
         maxCSF, j = 0, -1
-
+        print(
+            f"finding CC for {i}, centroidX = {centroids[i][0]}, centroidy = {centroids[i][1]}")
         for temp_ind in range(max(_ - 40, 0), min(_ + 40, n)):
             ind = V[temp_ind][1]
-
+            print(
+                f"checking CC {ind} csf = {CSF[i][ind]}, dis = {C[i][ind]}, centroidX = {centroids[ind][0]}, centroidy = {centroids[ind][1]}")
             # skip the ind_th box if it lies on the left side of i_th box
             if contours[ind][3] < contours[i][3]:
                 continue
@@ -101,7 +97,13 @@ def arrange(contours, centroids):
 
         if j != -1:
             dsu.union(j, i)
+            print(
+                f"merging {i} with {j} csf = {maxCSF}, parent = {dsu.find(i)}, {dsu.find(j)}")
+            # dsu.printDSU()
+        else:
+            print("didn't find anything...")
 
+    # print(f"no of lines = {dsu.distinctParents()}")
     lines = [[] for _ in range(dsu.distinctParents())]
     indexDictionary = {}
     curr = 0
@@ -118,3 +120,4 @@ def arrange(contours, centroids):
         lines[index_of_root].append(V[_])
 
     return lines
+
