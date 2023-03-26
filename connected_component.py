@@ -8,15 +8,14 @@ def connected_components(img):
     H, W = img.shape[0], img.shape[1]
     vis = np.zeros((H, W), dtype=int)
     contours, centroids = [], []
-    dir_x = [-1, 1, 0, 0, 1, -1, -1, 1]
-    dir_y = [0, 0, -1, 1, 1, -1, 1, -1]
+    dir_x = [-1, 1, 0, 0]
+    dir_y = [0, 0, -1, 1]
     for row in range(H):
         for col in range(W):
             if img[row][col] == 0 and not vis[row][col]:
                 x_min, x_max, y_min, y_max = INF, -INF, INF, -INF
                 vis[row][col] = 1
                 q.append((row, col))
-                points, Cx, Cy = 1, row, col
                 while len(q):
                     x, y = q.popleft()
                     x_min = min(x_min, x)
@@ -31,11 +30,6 @@ def connected_components(img):
                         if not vis[x_][y_] and img[x_][y_] == 0:
                             vis[x_][y_] = 1
                             q.append((x_, y_))
-                            Cx += x_
-                            Cy += y_
-                            points += 1
-                Cx /= points
-                Cy /= points
                 contours.append([x_min, y_min, x_max, y_max])
                 centroids.append([(x_min + x_max) / 2, (y_min + y_max) / 2])
     return contours, centroids
