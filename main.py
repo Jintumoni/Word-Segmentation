@@ -56,9 +56,11 @@ def main(argv, LineSegmentation: bool):
         name = filename[0:0+len(filename)-4]
         for _ in range(len(lines)):
             for i in range(len(lines[_])):
-                x, y, h, w = lines[_][i][0][0], lines[_][i][0][1], abs(lines[_][i][0][0]-lines[_][i][0][2]), abs(lines[_][i][0][1]-lines[_][i][0][3])
+                x, y, h, w = lines[_][i][0][0], lines[_][i][0][1], abs(
+                    lines[_][i][0][0]-lines[_][i][0][2]), abs(lines[_][i][0][1]-lines[_][i][0][3])
                 single_word = img[x:x+h, y:y+w]
-                cv.imwrite(f"./result/{name}_" + str(cnt) + ".png", single_word)
+                cv.imwrite(f"./result/{name}_" +
+                           str(cnt) + ".png", single_word)
                 cnt = cnt+1
 
         # to create the joining lines between the boxes and write the indexes of the boxes
@@ -71,12 +73,12 @@ def main(argv, LineSegmentation: bool):
                 thickness = 3
                 cv.line(img, startPoint, endPoint, color, thickness=thickness)
 
-            for i in range(len(lines[_])):
-                box1, msg = lines[_][i][0], str(lines[_][i][1])
-                x, y = (box1[1] + box1[3]) // 2, (box1[0] + box1[2]) // 2
-                font = cv.FONT_HERSHEY_SIMPLEX
-                cv.putText(img, msg, (x, y), font, 1,
-                           (0, 0, 255), 3, cv.LINE_AA)
+            # for i in range(len(lines[_])):
+            #     box1, msg = lines[_][i][0], str(lines[_][i][1])
+            #     x, y = (box1[1] + box1[3]) // 2, (box1[0] + box1[2]) // 2
+            #     font = cv.FONT_HERSHEY_SIMPLEX
+            #     cv.putText(img, msg, (x, y), font, 1,
+            #                (0, 0, 255), 3, cv.LINE_AA)
 
         # to create the bounding boxes
         for contour in contours:
@@ -85,12 +87,12 @@ def main(argv, LineSegmentation: bool):
                          (contour[3], contour[2]), color, thickness=1)
 
     # Scaling the image
-    scale_percent = SCALE_FACTOR * 100 # percent of original size
+    scale_percent = SCALE_FACTOR * 100  # percent of original size
     width = int(img.shape[1] * scale_percent / 100)
     height = int(img.shape[0] * scale_percent / 100)
     dim = (width, height)
-    resized = cv.resize(img, dim, interpolation = cv.INTER_AREA)
- 
+    resized = cv.resize(img, dim, interpolation=cv.INTER_AREA)
+
     cv.imshow('Binarised Image', BnW_image)
     cv.imshow('Distance transform', distTransform)
     cv.imshow('Transformed image', final_img)

@@ -25,7 +25,7 @@ The proper word level segmentation of printed or handwritten text is an importan
 4. To run the code (with image as *myFile.png*)
 
    ```bash coderunner.sh myFile.png```
-5. You can also provide additional flags `-d`, `-b` and `s`, `-d` represents the *Distance Transform Threshold* , `-b` represent the *Image Binarisation Threshold* and `s` represent the scaling factor
+5. You can also provide additional flags `-d`, `-b` and `-s`, `-d` represents the *Distance Transform Threshold* , `-b` represent the *Image Binarisation Threshold* and `-s` represent the scaling factor
 
    ```bash coderunner.sh -d 10 -b 200 -s 1 myFile.png```
 
