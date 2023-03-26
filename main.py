@@ -84,10 +84,17 @@ def main(argv, LineSegmentation: bool):
             cv.rectangle(img, (contour[1], contour[0]),
                          (contour[3], contour[2]), color, thickness=1)
 
+    # Scaling the image
+    scale_percent = 50 # percent of original size
+    width = int(img.shape[1] * scale_percent / 100)
+    height = int(img.shape[0] * scale_percent / 100)
+    dim = (width, height)
+    resized = cv.resize(img, dim, interpolation = cv.INTER_AREA)
+ 
     cv.imshow('Binarised Image', BnW_image)
     cv.imshow('Distance transform', distTransform)
     cv.imshow('Transformed image', final_img)
-    cv.imshow('Word Segmentation', img)
+    cv.imshow('Word Segmentation', resized)
 
     print("Press any key to quit ...")
 
