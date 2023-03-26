@@ -49,16 +49,13 @@ def main(argv, LineSegmentation: bool):
 
         # to store the words in a folder for future usage
         cnt = 0
-        wordImgList = []
-        letterBgr = 0
+        single_word = 0
         name = filename[0:0+len(filename)-4]
         for _ in range(len(lines)):
             for i in range(len(lines[_])):
-                x, y, h, w = lines[_][i][0][0], lines[_][i][0][1], abs(
-                    lines[_][i][0][0]-lines[_][i][0][2]), abs(lines[_][i][0][1]-lines[_][i][0][3])
-                letterBgr = img[x:x+h, y:y+w]
-                wordImgList.append(letterBgr)
-                cv.imwrite(f"./result/{name}_" + str(cnt) + ".png", letterBgr)
+                x, y, h, w = lines[_][i][0][0], lines[_][i][0][1], abs(lines[_][i][0][0]-lines[_][i][0][2]), abs(lines[_][i][0][1]-lines[_][i][0][3])
+                single_word = img[x:x+h, y:y+w]
+                cv.imwrite(f"./result/{name}_" + str(cnt) + ".png", single_word)
                 cnt = cnt+1
 
         # to create the joining lines between the boxes and write the indexes of the boxes
