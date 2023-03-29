@@ -61,11 +61,38 @@ def connectivityStrength(x1, y1, x2, y2, D):
     CSF = distanceFactor + slopeFactor
     return CSF - 50
 
+
+def lineCorrection(line, CSF):
+    correction = []
+    line = sorted(line, key=lambda x: (x[0][1] + x[0][3]) / 2)
+    print('\n before correction')
+    for l in line:
+        print(l[1], end=' ')
+    for l in line:
+        maxCSF, ind = 0, -1
+        for i in range(len(correction)):
+            if CSF[correction[i][-1][1]][l[1]] - EPS > maxCSF:
+                maxCSF = CSF[correction[i][-1][1]][l[1]]
+                ind = i
+
+        if ind == -1:
+            correction.append([l])
+        else:
+            correction[ind].append(l)
+    
+    print('\nafter correction')
+    for l in correction:
+        for line in l:
+            print(line[1], end=' ')
+        print('\n')
+    return correction
+
 def arrange(contours, centroids):
     n = len(contours)
     C = np.zeros([n, n])
     CSF = np.zeros([n, n])
     # CSF[i, j] shows the connectivity strength between the connected components i and j
+    slope = np.zeros([n, n])
 
     V = sorted([(contours[i], i) for i in range(len(contours))],
                key=lambda x: getDistance(0, 0, centroids[x[1]][0], centroids[x[1]][1]))
@@ -74,6 +101,7 @@ def arrange(contours, centroids):
     for i in range(n):
         for j in range(n):
             C[i][j] = getDistanceBetweenBox(contours[i], contours[j])
+            slope[i][j] = getSlope(centroids[i][0], centroids[i][1], centroids[j][0], centroids[j][1])
             # C[i][j] = getDistance(centroids[i][0], centroids[i][1], centroids[j][0], centroids[j][1])
             CSF[i][j] = connectivityStrength(
                 centroids[i][0], centroids[i][1], centroids[j][0], centroids[j][1], C[i][j])
@@ -82,11 +110,11 @@ def arrange(contours, centroids):
         i = V[_][1]
         maxCSF, j = 0, -1
         print(
-            f"finding CC for {i}, centroidX = {centroids[i][0]}, centroidy = {centroids[i][1]}")
+            f"finding CC for {i}")
         for temp_ind in range(max(_ - 40, 0), min(_ + 40, n)):
             ind = V[temp_ind][1]
             print(
-                f"checking CC {ind} csf = {CSF[i][ind]}, dis = {C[i][ind]}, centroidX = {centroids[ind][0]}, centroidy = {centroids[ind][1]}")
+                f"checking CC {ind}, csf = {CSF[i][ind]}, dis = {C[i][ind]}, slope = {slope[i][ind]}")
             # skip the ind_th box if it lies on the left side of i_th box
             if contours[ind][3] < contours[i][3]:
                 continue
@@ -101,6 +129,7 @@ def arrange(contours, centroids):
                 f"merging {i} with {j} csf = {maxCSF}, parent = {dsu.find(i)}, {dsu.find(j)}")
             # dsu.printDSU()
         else:
+
             print("didn't find anything...")
 
     # print(f"no of lines = {dsu.distinctParents()}")
@@ -118,6 +147,11 @@ def arrange(contours, centroids):
             curr += 1
 
         lines[index_of_root].append(V[_])
+    
+    correctedLines = []
+    for line in lines:
+        for lines in lineCorrection(line, CSF):
+            correctedLines.append(lines)
 
-    return lines
+    return correctedLines
 

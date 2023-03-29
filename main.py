@@ -9,7 +9,7 @@ from sequence import arrange
 def main(argv, LineSegmentation: bool):
     # if you don't provide -d or -b flags, these will be the default values
     BnW_THRESHOLD = 200
-    DT_THRESHOLD = 6
+    DT_THRESHOLD = 10
     filename = ""
 
     try:
@@ -78,11 +78,11 @@ def main(argv, LineSegmentation: bool):
                 cv.putText(img, msg, (x, y), font, 1,
                            (0, 0, 255), 3, cv.LINE_AA)
 
-        # to create the bounding boxes
-        for contour in contours:
-            color = (0, 0, 0)  # black boxes
-            cv.rectangle(img, (contour[1], contour[0]),
-                         (contour[3], contour[2]), color, thickness=1)
+    # to create the bounding boxes
+    for contour in contours:
+        color = (0, 0, 0)  # black boxes
+        cv.rectangle(img, (contour[1], contour[0]),
+                        (contour[3], contour[2]), color, thickness=1)
 
     cv.imshow('Binarised Image', BnW_image)
     cv.imshow('Distance transform', distTransform)

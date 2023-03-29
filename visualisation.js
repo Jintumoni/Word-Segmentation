@@ -151,7 +151,7 @@ function calculateStrength(x1, y1, x2, y2, D) {
   let distanceFactor = getDistanceFactor(distance);
 
   let CSF = (slopeFactor + distanceFactor);
-  return CSF;
+  return CSF - 50;
 }
 
 
