@@ -68,6 +68,25 @@ def connectivityStrength(x1, y1, x2, y2, D):
     return CSF - 50
 
 
+def lineCorrection(line, CSF):
+    correction = []
+    line = sorted(line, key=lambda x: (x[0][1] + x[0][3]) / 2)
+   
+    for l in line:
+        maxCSF, ind = 0, -1
+        for i in range(len(correction)):
+            if CSF[correction[i][-1][1]][l[1]] - EPS > maxCSF:
+                maxCSF = CSF[correction[i][-1][1]][l[1]]
+                ind = i
+
+        if ind == -1:
+            correction.append([l])
+        else:
+            correction[ind].append(l)
+
+    return correction
+
+
 def arrange(contours, centroids):
     n = len(contours)
     C = np.zeros([n, n])
@@ -116,5 +135,10 @@ def arrange(contours, centroids):
             curr += 1
 
         lines[index_of_root].append(V[_])
+    
+    correctedLines = []
+    for line in lines:
+        for lines in lineCorrection(line, CSF):
+            correctedLines.append(lines)
 
-    return lines
+    return correctedLines

@@ -80,11 +80,11 @@ def main(argv, LineSegmentation: bool):
             #     cv.putText(img, msg, (x, y), font, 1,
             #                (0, 0, 255), 3, cv.LINE_AA)
 
-        # to create the bounding boxes
-        for contour in contours:
-            color = (0, 0, 0)  # black boxes
-            cv.rectangle(img, (contour[1], contour[0]),
-                         (contour[3], contour[2]), color, thickness=1)
+    # to create the bounding boxes
+    for contour in contours:
+        color = (0, 0, 0)  # black boxes
+        cv.rectangle(img, (contour[1], contour[0]),
+                        (contour[3], contour[2]), color, thickness=1)
 
     # Scaling the image
     scale_percent = SCALE_FACTOR * 100  # percent of original size
